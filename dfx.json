@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "shekles_backend": {
+      "main": "src/shekles_backend/main.mo",
+      "type": "motoko"
+    },
+    "shekles_frontend": {
+      "dependencies": [
+        "shekles_backend"
+      ],
+      "source": [
+        "src/shekles_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "shekles_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
