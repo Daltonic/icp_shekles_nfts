@@ -1,31 +1,15 @@
-import { useState } from 'react';
-import { shekles_backend } from 'declarations/shekles_backend';
+import homeImage from '../assets/home-img.png'
+import Header from './components/Header'
+import Footer from './components/Footer'
 
 function App() {
-  const [greeting, setGreeting] = useState('');
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    shekles_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
-
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
+    <main className="App">
+      <Header />
+      <img className="bottom-space" src={homeImage} />
+      <Footer />
     </main>
-  );
+  )
 }
 
-export default App;
+export default App
