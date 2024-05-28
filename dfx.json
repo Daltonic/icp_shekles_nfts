@@ -4,6 +4,10 @@
       "main": "src/shekles_backend/main.mo",
       "type": "motoko"
     },
+    "nft": {
+      "main": "src/shekles_backend/nfts/nft.mo",
+      "type": "motoko"
+    },
     "shekles_frontend": {
       "dependencies": [
         "shekles_backend"
