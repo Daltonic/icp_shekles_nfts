@@ -1,5 +1,6 @@
 import React from 'react'
 import logo from '../../assets/logo.png'
+import { Link } from 'react-router-dom'
 
 function Header() {
   return (
@@ -9,18 +10,30 @@ function Header() {
           <div className="header-left-4"></div>
           <img className="header-logo-11" src={logo} />
           <div className="header-vertical-9"></div>
-          <h5 className="Typography-root header-logo-text">Shekles</h5>
+          <Link to={'/'} className="Typography-root header-logo-text">
+            Shekles
+          </Link>
           <div className="header-empty-6"></div>
           <div className="header-space-8"></div>
-          <button className="ButtonBase-root Button-root Button-text header-navButtons-3">
+
+          <Link
+            to={'/discover'}
+            className="ButtonBase-root Button-root Button-text header-navButtons-3"
+          >
             Discover
-          </button>
-          <button className="ButtonBase-root Button-root Button-text header-navButtons-3">
+          </Link>
+          <Link
+            to={'/minter'}
+            className="ButtonBase-root Button-root Button-text header-navButtons-3"
+          >
             Minter
-          </button>
-          <button className="ButtonBase-root Button-root Button-text header-navButtons-3">
+          </Link>
+          <Link
+            to={'/collection'}
+            className="ButtonBase-root Button-root Button-text header-navButtons-3"
+          >
             My NFTs
-          </button>
+          </Link>
         </div>
       </header>
     </div>

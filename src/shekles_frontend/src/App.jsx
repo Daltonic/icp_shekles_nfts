@@ -2,16 +2,22 @@ import homeImage from '../assets/home-img.png'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Minter from './components/Minter'
-import Item from './components/Item'
+import Gallery from './components/Gallery'
+import { Route, Routes } from 'react-router-dom'
 
-function App() {
-  const NFT_ID = 'b77ix-eeaaa-aaaaa-qaada-cai'
+const App = () => {
   return (
     <main className="App">
       <Header />
-      {/* <img className="bottom-space" src={homeImage} /> */}
-      {/* <Item id={NFT_ID} /> */}
-      <Minter />
+      <Routes>
+        <Route
+          path="/"
+          element={<img className="bottom-space" src={homeImage} />}
+        />
+        <Route path="/minter" element={<Minter />} />
+        <Route path="/discover" element={<Gallery title="Discover" />} />
+        <Route path="/collection" element={<Gallery title="My NFTs" />} />
+      </Routes>
       <Footer />
     </main>
   )

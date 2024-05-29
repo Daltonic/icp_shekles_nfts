@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { shekles_backend } from '../../../declarations/shekles_backend'
-import { Principal } from '@dfinity/principal'
+import { shekles_backend } from 'declarations/shekles_backend'
 import Item from './Item'
 
 function Minter() {
@@ -33,7 +32,7 @@ function Minter() {
       formData.imageFile,
       formData.collectionName
     )
-    setMintedId(newMintID.toText())
+    setMintedId(newMintID)
     console.log(newMintID.toText())
 
     // Reset the form
