@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Actor, HttpAgent } from '@dfinity/agent'
 import { idlFactory } from '../../../declarations/nft'
+import { idlFactory as tokenIdlFactory } from '../../../declarations/token'
 import Button from './Button'
 import { shekles_backend } from '../../../declarations/shekles_backend'
 import CURRENT_USER_ID from '../main'
 import PriceLabel from './PriceLabel'
+import { Principal } from '@dfinity/principal'
 
 function Item({ id, role }) {
   const [nft, setNft] = useState(null)
@@ -80,7 +82,22 @@ function Item({ id, role }) {
   }
 
   const handleBuy = async () => {
-    console.log('Clicked')
+    console.log('Buying...')
+
+    const TokenActor = Actor.createActor(tokenIdlFactory, {
+      agent,
+      canisterId: Principal.fromText('a3shf-5eaaa-aaaaa-qaafa-cai'),
+    })
+
+    const sellerId = await shekles_backend.getOriginalOwner(id)
+    const listingPrice = await shekles_backend.getListedNFTPrice(id)
+
+    let result = await TokenActor.transfer(sellerId, listingPrice)
+    if (result == 'Success') {
+      result = await shekles_backend.transferFrom(id, sellerId, CURRENT_USER_ID)
+      console.log('Sold: ' + result)
+      loadNFT()
+    }
   }
 
   return (

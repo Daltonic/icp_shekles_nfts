@@ -107,4 +107,34 @@ actor Shekles {
 
         return listing.itemPrice;
     };
+
+    public func transferFrom(id : Principal, ownerId : Principal, newOwner : Principal) : async Text {
+        var item : NFT.NFT = switch (collection.get(id)) {
+            case null return "NFT not found.";
+            case (?result) result;
+        };
+
+        let result = await item.transferOwnership(newOwner);
+        if (result == "Transfer success") {
+            listingCollection.delete(id);
+
+            var userNFTs : List.List<Principal> = switch (ownerCollection.get(ownerId)) {
+                case null List.nil<Principal>();
+                case (?result) result;
+            };
+
+            userNFTs := List.filter(
+                userNFTs,
+                func(listItemId : Principal) : Bool {
+                    return listItemId != id;
+                },
+            );
+
+            addToOwnerCollection(newOwner, id);
+            return "Success";
+        } else {
+            return "Failed";
+        };
+
+    };
 };
