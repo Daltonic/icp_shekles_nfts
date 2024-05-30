@@ -3,8 +3,10 @@ import { Actor, HttpAgent } from '@dfinity/agent'
 import { idlFactory } from '../../../declarations/nft'
 import Button from './Button'
 import { shekles_backend } from '../../../declarations/shekles_backend'
+import CURRENT_USER_ID from '../main'
+import PriceLabel from './PriceLabel'
 
-function Item({ id }) {
+function Item({ id, role }) {
   const [nft, setNft] = useState(null)
   const [price, setPrice] = useState('')
   const [message, setMessage] = useState('')
@@ -31,7 +33,17 @@ function Item({ id }) {
 
     const owner = await NFTActor.getOwner()
     const itemListed = await shekles_backend.isListed(id)
-    setNft({ name, image, owner: owner.toText(), itemListed })
+    const orginalOwner = await shekles_backend.getOriginalOwner(id)
+    const listingPrice = await shekles_backend.getListedNFTPrice(id)
+
+    setNft({
+      name,
+      image,
+      owner: owner.toText(),
+      orginalOwner: !role ? orginalOwner.toText() : '',
+      listingPrice: listingPrice.toString(),
+      itemListed,
+    })
   }
 
   useEffect(() => {
@@ -67,15 +79,28 @@ function Item({ id }) {
     loadNFT()
   }
 
+  const handleBuy = async () => {
+    console.log('Clicked')
+  }
+
   return (
     nft && (
       <div className="disGrid-item">
         <div className="disPaper-root disCard-root makeStyles-root-17 disPaper-elevation1 disPaper-rounded">
-          <img
-            className="disCardMedia-root makeStyles-image-19 disCardMedia-media disCardMedia-img"
-            src={nft.image}
-            style={{ filter: !nft.itemListed ? 'blur(0px)' : 'blur(4px)' }}
-          />
+          {role && (
+            <img
+              className="disCardMedia-root makeStyles-image-19 disCardMedia-media disCardMedia-img"
+              src={nft.image}
+              style={{ filter: !nft.itemListed ? 'blur(0px)' : 'blur(4px)' }}
+            />
+          )}
+
+          {!role && (
+            <img
+              className="disCardMedia-root makeStyles-image-19 disCardMedia-media disCardMedia-img"
+              src={nft.image}
+            />
+          )}
 
           {processing && (
             <div className="lds-ellipsis">
@@ -87,6 +112,7 @@ function Item({ id }) {
           )}
 
           <div className="disCardContent-root">
+            <PriceLabel price={nft.listingPrice} />
             <h2 className="disTypography-root makeStyles-bodyText-24 disTypography-h5 disTypography-gutterBottom">
               {nft.name}
               {nft.itemListed && <span className="purple-text"> Listed</span>}
@@ -111,6 +137,11 @@ function Item({ id }) {
             {!inputing && !nft.itemListed && (
               <Button text="Sell" handleClick={() => setInputing(true)} />
             )}
+            {!role &&
+              nft.orginalOwner != '' &&
+              nft.orginalOwner != CURRENT_USER_ID && (
+                <Button text="Buy" handleClick={handleBuy} />
+              )}
           </div>
         </div>
       </div>

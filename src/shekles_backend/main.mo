@@ -6,6 +6,7 @@ import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
 import List "mo:base/List";
 import Float "mo:base/Float";
+import Iter "mo:base/Iter";
 
 actor Shekles {
     private type Listing = {
@@ -13,9 +14,9 @@ actor Shekles {
         itemPrice : Float;
     };
 
-    var collection = HashMap.HashMap<Principal, NFT.NFT>(1, Principal.equal, Principal.hash);
-    var ownerCollection = HashMap.HashMap<Principal, List.List<Principal>>(1, Principal.equal, Principal.hash);
-    var listingCollection = HashMap.HashMap<Principal, Listing>(1, Principal.equal, Principal.hash);
+    private var collection = HashMap.HashMap<Principal, NFT.NFT>(1, Principal.equal, Principal.hash);
+    private var ownerCollection = HashMap.HashMap<Principal, List.List<Principal>>(1, Principal.equal, Principal.hash);
+    private var listingCollection = HashMap.HashMap<Principal, Listing>(1, Principal.equal, Principal.hash);
 
     public shared ({ caller }) func mint(imgData : [Nat8], name : Text) : async Principal {
         let owner : Principal = caller;
@@ -51,6 +52,11 @@ actor Shekles {
         return List.toArray(userNFTs);
     };
 
+    public query func allCollection() : async [Principal] {
+        var ids = Iter.toArray(listingCollection.keys());
+        return ids;
+    };
+
     public shared ({ caller }) func listItem(id : Principal, price : Float) : async Text {
         var item : NFT.NFT = switch (collection.get(id)) {
             case null return "NFT not found.";
@@ -82,5 +88,23 @@ actor Shekles {
         } else {
             return true;
         };
+    };
+
+    public query func getOriginalOwner(id : Principal) : async Principal {
+        var listing : Listing = switch (listingCollection.get(id)) {
+            case null return Principal.fromActor(Shekles);
+            case (?result) result;
+        };
+
+        return listing.itemOwner;
+    };
+
+    public query func getListedNFTPrice(id : Principal) : async Float {
+        var listing : Listing = switch (listingCollection.get(id)) {
+            case null return 0;
+            case (?result) result;
+        };
+
+        return listing.itemPrice;
     };
 };

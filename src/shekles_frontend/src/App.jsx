@@ -16,7 +16,7 @@ const App = () => {
         />
         <Route path="/minter" element={<Minter />} />
         <Route path="/discover" element={<Gallery title="Discover" />} />
-        <Route path="/collection" element={<Gallery title="My NFTs" />} />
+        <Route path="/collection" element={<Gallery title="My NFTs" role={true} />} />
       </Routes>
       <Footer />
     </main>

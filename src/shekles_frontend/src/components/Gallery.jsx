@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import Item from './Item'
-import { shekles_backend } from '../../../declarations/shekles_backend'
+import { shekles_backend } from 'declarations/shekles_backend'
 import CURRENT_USER_ID from '../main'
+import Item from './Item'
 
-const Gallery = ({ title }) => {
+const Gallery = ({ title, role }) => {
   const [collection, setCollection] = useState([])
 
-  const getNFTs = async () => {
+  const getUserNFTs = async () => {
     const userNFTIds = await shekles_backend.userCollection(CURRENT_USER_ID)
     setCollection(userNFTIds)
   }
 
+  const getNFTs = async () => {
+    const nftIds = await shekles_backend.allCollection()
+    setCollection(nftIds)
+  }
+
   useEffect(() => {
-    if (title == 'My NFTs') {
+    if (role) {
+      getUserNFTs()
+    } else {
       getNFTs()
-    }else {
-      setCollection([])
     }
-  }, [title])
+  }, [role, title])
 
   return (
     <div className="gallery-view">
@@ -26,7 +31,7 @@ const Gallery = ({ title }) => {
         <div className="disGrid-root disGrid-item disGrid-grid-xs-12">
           <div className="disGrid-root disGrid-container disGrid-spacing-xs-5 disGrid-justify-content-xs-center">
             {collection.map((nftID, i) => (
-              <Item id={nftID} key={i} />
+              <Item id={nftID} key={i} role={role} />
             ))}
           </div>
         </div>
