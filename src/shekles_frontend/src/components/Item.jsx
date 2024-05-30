@@ -62,8 +62,8 @@ function Item({ id, role }) {
   }, [message])
 
   const handleConfirm = async () => {
-    setProcessing(true)
     const msg = await shekles_backend.listItem(id, Number(price))
+    setProcessing(true)
     setMessage(msg)
     setInputing(false)
     setPrice('')
@@ -82,7 +82,8 @@ function Item({ id, role }) {
   }
 
   const handleBuy = async () => {
-    console.log('Buying...')
+    setProcessing(true)
+    setMessage('Buying...')
 
     const TokenActor = Actor.createActor(tokenIdlFactory, {
       agent,
@@ -93,9 +94,12 @@ function Item({ id, role }) {
     const listingPrice = await shekles_backend.getListedNFTPrice(id)
 
     let result = await TokenActor.transfer(sellerId, listingPrice)
+    setMessage(result)
+    
     if (result == 'Success') {
       result = await shekles_backend.transferFrom(id, sellerId, CURRENT_USER_ID)
-      console.log('Sold: ' + result)
+      setMessage('Sold: ' + result)
+      setProcessing(false)
       loadNFT()
     }
   }

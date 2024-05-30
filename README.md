@@ -107,7 +107,7 @@ dfx canister call shekles_backend mint '(vec {137; 80; 78; 71; 13; 10; 26; 10; 0
 2. List the item into mapOfListings:
 
 ```
-dfx canister call shekles_backend listItem '(principal "ahw5u-keaaa-aaaaa-qaaha-cai", 2.0)'
+dfx canister call shekles_backend listItem '(principal "b77ix-eeaaa-aaaaa-qaada-cai", 2.0)'
 ```
 
 3. Get OpenD canister ID:
@@ -119,7 +119,7 @@ dfx canister id shekles_backend
 4. Transfer NFT to OpenD:
 
 ```
-dfx canister call ahw5u-keaaa-aaaaa-qaaha-cai transferOwnership '(principal "bkyz2-fmaaa-aaaaa-qaaaq-cai", true)'
+dfx canister call b77ix-eeaaa-aaaaa-qaada-cai transferOwnership '(principal "bkyz2-fmaaa-aaaaa-qaaaq-cai", true)'
 ```
 
 # Conneting to the Token Canister
